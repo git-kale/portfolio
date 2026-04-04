@@ -15,14 +15,23 @@ export async function getAllBlogPosts(): Promise<BlogPost[]> {
     }
 
     const fileNames = fs.readdirSync(blogsDirectory).filter(f => f.endsWith('.md'));
+    console.log(`Found ${fileNames.length} blog files:`, fileNames);
+    
     const allPosts: BlogPost[] = [];
 
     for (const fileName of fileNames) {
       const slug = fileName.replace(/\.md$/, '').replace(/^\d+-/, '');
+      console.log(`Processing: ${fileName} -> slug: ${slug}`);
       const post = await getBlogPost(slug);
-      if (post) allPosts.push(post);
+      if (post) {
+        console.log(`Loaded blog: ${slug}`);
+        allPosts.push(post);
+      } else {
+        console.warn(`Failed to load blog: ${slug} from file ${fileName}`);
+      }
     }
 
+    console.log(`Total blogs loaded: ${allPosts.length}`);
     return allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   } catch (error) {
     console.error('Error reading blog posts:', error);

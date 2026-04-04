@@ -5,39 +5,49 @@ import { marked } from 'marked';
 import { BlogPost } from './types';
 import { calculateReadTime } from './formatters';
 
-const blogsDirectory = path.join(process.cwd(), 'content/blog');
+const blogsDirectory = path.join(process.cwd(), 'content', 'blog');
 
 export async function getAllBlogPosts(): Promise<BlogPost[]> {
-  if (!fs.existsSync(blogsDirectory)) {
+  try {
+    if (!fs.existsSync(blogsDirectory)) {
+      console.warn(`Blog directory not found at ${blogsDirectory}`);
+      return [];
+    }
+
+    const fileNames = fs.readdirSync(blogsDirectory).filter(f => f.endsWith('.md'));
+    const allPosts: BlogPost[] = [];
+
+    for (const fileName of fileNames) {
+      const slug = fileName.replace(/\.md$/, '').replace(/^\d+-/, '');
+      const post = await getBlogPost(slug);
+      if (post) allPosts.push(post);
+    }
+
+    return allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+  } catch (error) {
+    console.error('Error reading blog posts:', error);
     return [];
   }
-
-  const fileNames = fs.readdirSync(blogsDirectory).filter(f => f.endsWith('.md'));
-  const allPosts: BlogPost[] = [];
-
-  for (const fileName of fileNames) {
-    const slug = fileName.replace(/\.md$/, '').replace(/^\d+-/, '');
-    const post = await getBlogPost(slug);
-    if (post) allPosts.push(post);
-  }
-
-  return allPosts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
 export async function getBlogPost(slug: string): Promise<BlogPost | null> {
   try {
     const fullPath = path.join(blogsDirectory, `${slug}.md`);
-    
-    if (!fs.existsSync(fullPath)) {
+    let fileContents: string | null = null;
+
+    if (fs.existsSync(fullPath)) {
+      fileContents = fs.readFileSync(fullPath, 'utf8');
+    } else {
       // Try with number prefix
       const files = fs.readdirSync(blogsDirectory);
       const file = files.find(f => f.endsWith(`-${slug}.md`));
-      if (!file) return null;
-      const content = fs.readFileSync(path.join(blogsDirectory, file), 'utf8');
-      return await parsePost(slug, content);
+      if (!file) {
+        console.warn(`Blog post not found: ${slug}`);
+        return null;
+      }
+      fileContents = fs.readFileSync(path.join(blogsDirectory, file), 'utf8');
     }
 
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
     return await parsePost(slug, fileContents);
   } catch (error) {
     console.error(`Error reading blog post ${slug}:`, error);

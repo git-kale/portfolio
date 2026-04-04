@@ -29,7 +29,7 @@ export default function ContactPage() {
     setSubmitMessage('');
 
     try {
-      const response = await fetch('/api/contact', {
+      const response = await fetch('https://portfolio-git-kales-projects.vercel.app/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -7,15 +7,16 @@ import { Card } from '@/components/shared/Card';
 import { notFound } from 'next/navigation';
 
 interface BlogPostPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export const dynamicParams = false;
 
 export async function generateMetadata({ params }: BlogPostPageProps) {
-  const post = await getBlogPost(params.slug);
+  const { slug } = await params;
+  const post = await getBlogPost(slug);
   if (!post) {
     return {
       title: 'Article Not Found',
@@ -39,7 +40,8 @@ export async function generateStaticParams() {
 const badgeVariants = ['cyan', 'indigo', 'pink', 'purple', 'yellow'] as const;
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
-  const post = await getBlogPost(params.slug);
+  const { slug } = await params;
+  const post = await getBlogPost(slug);
 
   if (!post) {
     notFound();

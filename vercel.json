@@ -30,6 +30,23 @@
       ]
     },
     {
+      "source": "/api/(.*)",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://git-kale.github.io"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type"
+        }
+      ]
+    },
+    {
       "source": "/blog/(.*)",
       "headers": [
         {
@@ -55,13 +72,6 @@
           "value": "public, max-age=31536000, immutable"
         }
       ]
-    }
-  ],
-  "redirects": [
-    {
-      "source": "/blog",
-      "destination": "/blog",
-      "permanent": true
     }
   ],
   "rewrites": [

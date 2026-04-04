@@ -12,6 +12,8 @@ interface BlogPostPageProps {
   };
 }
 
+export const dynamicParams = false;
+
 export async function generateMetadata({ params }: BlogPostPageProps) {
   const post = await getBlogPost(params.slug);
   if (!post) {
@@ -27,6 +29,8 @@ export async function generateMetadata({ params }: BlogPostPageProps) {
 
 export async function generateStaticParams() {
   const posts = await getAllBlogPosts();
+  console.log(`generateStaticParams: ${posts.length} posts`);
+  console.log('Generated params:', posts.map(p => ({ slug: p.slug })));
   return posts.map(post => ({
     slug: post.slug,
   }));

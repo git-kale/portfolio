@@ -30,7 +30,7 @@ export default function RootLayout({
       </head>
       <body>
         <Header />
-        <main className="content-wrapper min-h-screen">
+        <main className="content-wrapper min-h-screen pt-20">
           {children}
         </main>
         <Footer />

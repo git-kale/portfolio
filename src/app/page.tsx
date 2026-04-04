@@ -13,7 +13,7 @@ export default async function Home() {
     <>
       {/* Hero Section */}
       <section className="min-h-screen flex items-center justify-center px-6 py-20">
-        <div className="max-w-5xl mx-auto w-full">
+        <div className="max-w-6xl mx-auto w-full">
           <div className="text-center space-y-8">
             {/* Main Heading */}
             <div className="space-y-4">

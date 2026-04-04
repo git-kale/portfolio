@@ -9,7 +9,7 @@ export const metadata = {
 export default function ResumePage() {
   return (
     <section className="py-20 px-6 min-h-screen bg-gradient-to-b from-transparent via-indigo-950/20 to-transparent">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         <div className="space-y-4 mb-12 text-center">
           <h1 className="text-5xl md:text-6xl font-black gradient-text">Resume</h1>
           <p className="text-lg text-slate-400">Backend Engineer | Systems Architect | DevOps Specialist</p>

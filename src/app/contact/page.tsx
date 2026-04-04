@@ -1,7 +1,7 @@
 'use client';
 
 import { Card } from '@/components/shared/Card';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function ContactPage() {
   const [formState, setFormState] = useState({
@@ -13,6 +13,12 @@ export default function ContactPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [submitMessage, setSubmitMessage] = useState('');
+  const [isStaticExport, setIsStaticExport] = useState(false);
+
+  useEffect(() => {
+    // Check if we're in static export mode (no server routes available)
+    setIsStaticExport(process.env.NEXT_PUBLIC_STATIC_EXPORT === 'true');
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -29,7 +35,7 @@ export default function ContactPage() {
     setSubmitMessage('');
 
     try {
-      const response = await fetch('https://portfolio-git-kales-projects.vercel.app/api/contact', {
+      const response = await fetch('/api/contact', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -58,7 +64,7 @@ export default function ContactPage() {
 
   return (
     <section className="py-20 px-6 min-h-screen bg-gradient-to-b from-transparent via-indigo-950/20 to-transparent">
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         <div className="space-y-4 mb-12 text-center">
           <h1 className="text-5xl md:text-6xl font-black gradient-text">Let's Connect</h1>
           <p className="text-lg text-slate-400">
@@ -71,7 +77,32 @@ export default function ContactPage() {
           <Card className="space-y-6">
             <h2 className="text-2xl font-bold text-white mb-6">Send me a Message</h2>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            {isStaticExport ? (
+              <div className="space-y-4 p-4 bg-indigo-500/10 border border-indigo-500/30 rounded-lg">
+                <p className="text-slate-300">Contact form submissions are available on the live site. For now, please use the contact methods below.</p>
+                <div className="space-y-2 pt-2">
+                  <p className="text-sm text-slate-400">
+                    <i className="fas fa-envelope text-cyan-400 mr-2"></i>
+                    <a href="mailto:mahesh@example.com" className="text-cyan-400 hover:text-cyan-300">
+                      mahesh@example.com
+                    </a>
+                  </p>
+                  <p className="text-sm text-slate-400">
+                    <i className="fas fa-github text-cyan-400 mr-2"></i>
+                    <a href="https://github.com/git-kale" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:text-cyan-300">
+                      github.com/git-kale
+                    </a>
+                  </p>
+                  <p className="text-sm text-slate-400">
+                    <i className="fas fa-linkedin text-cyan-400 mr-2"></i>
+                    <a href="https://linkedin.com/in/mahesh-kale" target="_blank" rel="noopener noreferrer" className="text-cyan-400 hover:text-cyan-300">
+                      linkedin.com/in/mahesh-kale
+                    </a>
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-sm font-bold text-slate-400 mb-2">Name</label>
                 <input
@@ -146,6 +177,7 @@ export default function ContactPage() {
 
               <p className="text-xs text-slate-500 text-center">I'll get back to you within 24 hours.</p>
             </form>
+            )}
           </Card>
 
           {/* Contact Info */}

@@ -25,8 +25,11 @@ export const BlogGrid: React.FC<BlogGridProps> = ({ posts, tags }) => {
     );
   }, [posts, selectedTags]);
 
-  const totalPages = Math.ceil(filteredPosts.length / articlesPerPage);
-  const paginatedPosts = filteredPosts.slice(
+  const featuredPost = filteredPosts.length > 0 ? filteredPosts[0] : null;
+  const remainingPosts = filteredPosts.slice(1);
+  
+  const totalPages = Math.ceil(remainingPosts.length / articlesPerPage);
+  const paginatedPosts = remainingPosts.slice(
     (currentPage - 1) * articlesPerPage,
     currentPage * articlesPerPage
   );
@@ -92,13 +95,27 @@ export const BlogGrid: React.FC<BlogGridProps> = ({ posts, tags }) => {
         </div>
       </div>
 
+      {/* Featured Article */}
+      {featuredPost && (
+        <div className="pb-2">
+          <h2 className="text-sm font-bold text-cyan-400 uppercase tracking-wider mb-4">Featured Article</h2>
+          <BlogCard post={featuredPost} featured={true} />
+        </div>
+      )}
+
       {/* Main Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Articles */}
-        <div className="lg:col-span-2 space-y-8">
+        <div className="lg:col-span-3 space-y-8">
           {paginatedPosts.length > 0 ? (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {paginatedPosts.length > 0 && (
+                <div className="pb-2">
+                  <h2 className="text-sm font-bold text-indigo-400 uppercase tracking-wider mb-4">Latest Articles</h2>
+                </div>
+              )}
+              
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                 {paginatedPosts.map(post => (
                   <BlogCard key={post.slug} post={post} />
                 ))}

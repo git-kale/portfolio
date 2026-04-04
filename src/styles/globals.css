@@ -100,6 +100,20 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Hamburger menu button animation */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(34, 211, 238, 0.5), 0 0 40px rgba(34, 211, 238, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(34, 211, 238, 0.8), 0 0 60px rgba(34, 211, 238, 0.4);
+  }
+}
+
+.menu-toggle:hover {
+  animation: pulse-glow 1.5s ease-in-out infinite;
+}
+
 /* Button glow effect */
 .btn-glow {
   @apply relative overflow-hidden;

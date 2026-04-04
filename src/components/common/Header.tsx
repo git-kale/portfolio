@@ -57,10 +57,11 @@ export const Header: React.FC = () => {
             {/* Mobile menu toggle */}
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className="md:hidden w-10 h-10 rounded-lg glass flex items-center justify-center hover:bg-white/10 transition"
+              className="md:hidden menu-toggle w-12 h-12 rounded-lg bg-gradient-to-br from-cyan-500 to-cyan-600 hover:from-cyan-400 hover:to-cyan-500 flex items-center justify-center transition shadow-lg shadow-cyan-500/50 border border-cyan-400/50"
               aria-label="Toggle menu"
+              title="Open menu"
             >
-              <i className={`fas fa-${menuOpen ? 'times' : 'bars'} text-cyan-400`}></i>
+              <i className={`fas fa-${menuOpen ? 'times' : 'bars'} text-white text-lg font-bold`}></i>
             </button>
           </div>
         </div>

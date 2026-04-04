@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 interface ButtonProps {
   children: React.ReactNode;
@@ -38,10 +39,10 @@ export const Button: React.FC<ButtonProps> = ({
 
   if (href) {
     return (
-      <a href={href} className={classes}>
+      <Link href={href} className={classes}>
         {icon && <i className={`fas fa-${icon}`}></i>}
         {children}
-      </a>
+      </Link>
     );
   }
 
